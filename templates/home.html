@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Quickwrite</title>
+    <link rel="stylesheet" href="https://use.typekit.net/bwi4pfa.css">
+    <link rel="stylesheet" type="text/css" href="/static/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.2.3/purify.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+<body>
+    <h1 style="margin-bottom: 10px;">Quickwrite</h1>
+    <i>What's on your mind? &nbsp;&nbsp; | &nbsp;&nbsp; <a href="/{{ username }}">Profile link</a></i>
+    <br><br><br>
+
+    <h3 style="margin-bottom: 0px; font-weight: 700;">You can create your posts on github!</h3>
+    <p style="margin-top: 4px;">On <a href="https://gist.github.com">gist.github.com</a>, create a gist prefixed with <code>quickwrite--</code> and suffixed with <code>.md</code>. For example, if I wanted to make a post called <code>hello world</code>, on Github gists, I'd make a gist called <code>quickwrite--hello world.md</code>. Once you create your gist, reload this page to see your post!</p>
+
+    <br><br>
+
+    <form method="post" action="/write">
+        <i>p.s.- I support markdown!</i>
+        <br><br>
+        <div style="display: flex; gap: 10px">
+            <textarea name="content" id="editor" onkeyup="render()" placeholder="Write something..."></textarea>
+            <div id="preview"></div>
+        </div>
+        <br>
+        <div id="modal">
+            <div style="background-color: #FFFDF0; padding: 50px; border-radius: 8px; width: fit-content; height: fit-content; padding-top: 20px;">
+                <h3>Wait! Before you go, give your piece a name!</h3>
+                <input name="name" type="text" placeholder="Name">
+                <div style="display: flex; margin-top: 20px; gap: 5px;">
+                    <button type="submit">Submit</button>
+                    <button type="button" class="secondary" onclick="document.getElementById('modal').style.display = 'none'">Cancel</button>
+                </div>
+            </div>
+        </div>
+        <button type="button" onclick="document.getElementById('modal').style.display = 'flex'">Submit</button>
+    </form>
+
+    <script>
+        function render() {
+            var editor = document.getElementById("editor");
+            var preview = document.getElementById("preview");
+            var content = editor.value;
+            console.log(DOMPurify.sanitize(marked.parse(content)))
+            preview.innerHTML = DOMPurify.sanitize(marked.parse(content));
+        }
+    </script>
+
+    <br><br><br>
+    <h2>Your Gists</h2>
+    <div id="gists">
+        {% for gist in gists %}
+            <div class="gist">
+                <h3 style="margin-bottom: 4px;">{{ gist.name }} &nbsp;&nbsp; <i style="font-size: .7em;">{{ gist.created }}</i></h3>
+                <a style="font-size: 1.2em;" href="/{{ username }}/{{ gist.id }}">Read more</a>
+                <br>
+            </div>
+        {% endfor %}
+    </div>
+
+</body>
+</html>

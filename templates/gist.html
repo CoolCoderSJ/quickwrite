@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Quickwrite</title>
+    <link rel="stylesheet" href="https://use.typekit.net/bwi4pfa.css">
+    <link rel="stylesheet" type="text/css" href="/static/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.2.3/purify.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+<body>
+    <h1 style="margin-bottom: 10px;">{{ name }}</h1>
+    <i>{{ created }}</i>
+    <br><br><br>
+    <div id="content">
+    </div>
+
+    <script>
+        var content = `{{ content }}`;
+        document.getElementById("content").innerHTML = DOMPurify.sanitize(marked.parse(content));
+    </script>
+
+</body>
+</html>
